@@ -54,6 +54,16 @@ struct HomeView: View {
                     }
                     goalVM.updateStreakIfNeeded(currentSteps: pedometerVM.steps)
                 }
+                
+                // Total distance can be fetched from Core Data if needed
+                let totalDistance = pedometerVM.distance  // Simplified for now
+                
+                let achievementsVM = AchievementsViewModel()
+                achievementsVM.checkForAchievements(
+                    stepsToday: pedometerVM.steps,
+                    streak: goalVM.currentStreak,
+                    totalDistance: totalDistance
+                )
             }
 
         }

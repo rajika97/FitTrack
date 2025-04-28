@@ -27,11 +27,12 @@ struct MainTabView: View {
                     Text("Goals")
                 }
             
-            ProfileView()
+            AchievementsView()
                 .tabItem {
-                    Image(systemName: "person.crop.circle")
-                    Text("Profile")
+                    Image(systemName: "rosette")
+                    Text("Achievements")
                 }
+
         }
     }
 }
