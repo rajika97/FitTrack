@@ -4,6 +4,7 @@ import CoreMotion
 struct HomeView: View {
     @StateObject private var pedometerVM = PedometerViewModel()
     @StateObject private var activityVM = DailyActivityViewModel()
+    @StateObject private var goalVM = GoalViewModel()
     
     var body: some View {
         NavigationView {
@@ -12,10 +13,13 @@ struct HomeView: View {
                     .font(.title2)
                     .bold()
                 
-                Text("\(pedometerVM.steps)")
-                    .font(.system(size: 50))
+                Text("\(pedometerVM.steps) / \(goalVM.dailyStepGoal)")
+                    .font(.system(size: 40))
                     .bold()
-                    .foregroundColor(.green)
+                    .foregroundColor(pedometerVM.steps >= goalVM.dailyStepGoal ? .green : .orange)
+                
+                ProgressView(value: Float(pedometerVM.steps), total: Float(goalVM.dailyStepGoal))
+                    .padding()
                 
                 Text(String(format: "Distance: %.2f meters", pedometerVM.distance))
                     .foregroundColor(.gray)
@@ -27,6 +31,8 @@ struct HomeView: View {
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .cornerRadius(10)
+                
+                Spacer()
             }
             .padding()
             .navigationTitle("Home")
