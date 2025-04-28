@@ -24,4 +24,23 @@ class DailyActivityViewModel: ObservableObject {
             print("Failed to save activity: \(error.localizedDescription)")
         }
     }
+    
+    @Published var weeklyActivities: [DailyActivity] = []
+
+    func fetchWeeklyActivities() {
+        let fetchRequest: NSFetchRequest<DailyActivity> = DailyActivity.fetchRequest()
+        
+        let startDate = Calendar.current.date(byAdding: .day, value: -6, to: Calendar.current.startOfDay(for: Date()))!
+        fetchRequest.predicate = NSPredicate(format: "date >= %@", startDate as NSDate)
+        
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            weeklyActivities = try context.fetch(fetchRequest)
+        } catch {
+            print("Failed to fetch weekly data: \(error.localizedDescription)")
+        }
+    }
+
 }
