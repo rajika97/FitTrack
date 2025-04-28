@@ -6,10 +6,8 @@ struct WorkoutsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 30) {
-                Text("Workout Timer")
-                    .font(.largeTitle)
-                    .bold()
                 
+                Divider()
                 Text(formatTime(timerVM.elapsedTime))
                     .font(.system(size: 50))
                     .monospacedDigit()
