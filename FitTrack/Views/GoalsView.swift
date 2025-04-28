@@ -35,6 +35,9 @@ struct GoalsView: View {
                 Spacer()
             }
             .padding()
+            .onTapGesture {
+                hideKeyboard()   
+            }
             .navigationTitle("Set Goals")
         }
     }
