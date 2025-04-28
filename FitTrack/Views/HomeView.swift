@@ -6,20 +6,19 @@ struct HomeView: View {
     @StateObject private var activityVM = DailyActivityViewModel()
     @StateObject private var goalVM = GoalViewModel()
     
+    @State private var showBadge = false
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("Today's Steps")
+                Text("Today's Progress")
                     .font(.title2)
                     .bold()
                 
-                Text("\(pedometerVM.steps) / \(goalVM.dailyStepGoal)")
-                    .font(.system(size: 40))
-                    .bold()
-                    .foregroundColor(pedometerVM.steps >= goalVM.dailyStepGoal ? .green : .orange)
-                
-                ProgressView(value: Float(pedometerVM.steps), total: Float(goalVM.dailyStepGoal))
-                    .padding()
+                ProgressRingView(
+                    progress: min(Double(pedometerVM.steps) / Double(goalVM.dailyStepGoal), 1.0),
+                    stepsText: "\(pedometerVM.steps) / \(goalVM.dailyStepGoal)"
+                )
                 
                 Text(String(format: "Distance: %.2f meters", pedometerVM.distance))
                     .foregroundColor(.gray)
@@ -32,10 +31,31 @@ struct HomeView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 
+                if goalVM.currentStreak > 0 {
+                    Text("🔥 Streak: \(goalVM.currentStreak) day\(goalVM.currentStreak > 1 ? "s" : "")")
+                        .font(.headline)
+                        .foregroundColor(.red)
+                        .transition(.opacity)
+                }
+                
+                if showBadge {
+                    BadgeView()
+                }
+                
                 Spacer()
             }
+
             .padding()
             .navigationTitle("Home")
+            .onChange(of: pedometerVM.steps) {
+                if pedometerVM.steps >= goalVM.dailyStepGoal {
+                    withAnimation {
+                        showBadge = true
+                    }
+                    goalVM.updateStreakIfNeeded(currentSteps: pedometerVM.steps)
+                }
+            }
+
         }
     }
 }
