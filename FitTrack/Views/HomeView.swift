@@ -5,6 +5,7 @@ struct HomeView: View {
     @StateObject private var pedometerVM = PedometerViewModel()
     @StateObject private var activityVM = DailyActivityViewModel()
     @StateObject private var goalVM = GoalViewModel()
+    @State private var activitySaved = false
     
     @State private var showBadge = false
 
@@ -23,13 +24,7 @@ struct HomeView: View {
                 Text(String(format: "Distance: %.2f meters", pedometerVM.distance))
                     .foregroundColor(.gray)
                 
-                Button("Save Today's Activity") {
-                    activityVM.saveTodayActivity(steps: pedometerVM.steps, distance: pedometerVM.distance)
-                }
-                .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
+            
                 
                 if goalVM.currentStreak > 0 {
                     Text("🔥 Streak: \(goalVM.currentStreak) day\(goalVM.currentStreak > 1 ? "s" : "")")
@@ -55,15 +50,10 @@ struct HomeView: View {
                     goalVM.updateStreakIfNeeded(currentSteps: pedometerVM.steps)
                 }
                 
-                // Total distance can be fetched from Core Data if needed
-                let totalDistance = pedometerVM.distance  // Simplified for now
-                
-                let achievementsVM = AchievementsViewModel()
-                achievementsVM.checkForAchievements(
-                    stepsToday: pedometerVM.steps,
-                    streak: goalVM.currentStreak,
-                    totalDistance: totalDistance
-                )
+                if !activitySaved {
+                    activityVM.saveTodayActivity(steps: pedometerVM.steps, distance: pedometerVM.distance)
+                    activitySaved = true
+                }
             }
 
         }
