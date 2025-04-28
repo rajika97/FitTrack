@@ -38,6 +38,9 @@ class DailyActivityViewModel: ObservableObject {
         
         do {
             weeklyActivities = try context.fetch(fetchRequest)
+            for act in weeklyActivities {
+                print("Date: \(act.date ?? Date()), Steps: \(act.steps), Distance: \(act.distance)")
+            }
         } catch {
             print("Failed to fetch weekly data: \(error.localizedDescription)")
         }

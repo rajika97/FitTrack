@@ -3,13 +3,15 @@ import SwiftUI
 @main
 struct FitTrackApp: App {
     @StateObject var theme = ThemeManager.shared
-    @StateObject var goalVM = GoalViewModel()   // Shared GoalViewModel
+    @StateObject var goalVM = GoalViewModel()
+    @StateObject var achievementsVM = AchievementsViewModel()
 
     var body: some Scene {
         WindowGroup {
             MainTabView()
                 .environmentObject(theme)
-                .environmentObject(goalVM)   // Inject here
+                .environmentObject(goalVM)
+                .environmentObject(achievementsVM)
                 .accentColor(theme.selectedColor)
                 .preferredColorScheme(theme.selectedMode)
         }

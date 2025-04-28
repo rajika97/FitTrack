@@ -29,14 +29,21 @@ struct StatisticsView: View {
                         .font(.headline)
                     
                     Chart(activityVM.weeklyActivities, id: \.date) { activity in
-                        LineMark(
-                            x: .value("Date", activity.date!, unit: .day),
-                            y: .value("Distance", activity.distance)
-                        )
-                        .foregroundStyle(.blue)
+                        if activityVM.weeklyActivities.count == 1 {
+                            PointMark(
+                                x: .value("Date", activity.date!, unit: .day),
+                                y: .value("Distance", activity.distance)
+                            )
+                        } else {
+                            LineMark(
+                                x: .value("Date", activity.date!, unit: .day),
+                                y: .value("Distance", activity.distance)
+                            )
+                        }
                     }
                     .frame(height: 200)
                     .padding()
+
                 }
             }
             .navigationTitle("Statistics")
