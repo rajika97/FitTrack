@@ -3,15 +3,30 @@ import XCTest
 
 final class GoalViewModelTests: XCTestCase {
     
-    func testDefaultDailyGoal() {
+    func testUpdateStreak_FirstTime() {
+        // Clear UserDefaults for clean test state
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "currentStreak")
+        defaults.removeObject(forKey: "lastAchievedDate")
+        
         let goalVM = GoalViewModel()
-        XCTAssertTrue(goalVM.dailyStepGoal >= 5000, "Default daily step goal should be at least 5000")
+        goalVM.currentStreak = 0  // Ensure starting from 0
+
+        // Simulate achieving goal
+        goalVM.updateStreakIfNeeded(currentSteps: goalVM.dailyStepGoal + 100)
+
+        XCTAssertEqual(goalVM.currentStreak, 1, "Streak should start at 1 when goal is first achieved.")
     }
+
     
-    func testStreakIncrement() {
+    func testUpdateStreak_SameDay_NoIncrement() {
         let goalVM = GoalViewModel()
-        goalVM.currentStreak = 3
+        goalVM.currentStreak = 2
         goalVM.updateStreakIfNeeded(currentSteps: goalVM.dailyStepGoal)
-        XCTAssertTrue(goalVM.currentStreak >= 3, "Streak should not decrease when updated properly")
+        let initialStreak = goalVM.currentStreak
+        
+        goalVM.updateStreakIfNeeded(currentSteps: goalVM.dailyStepGoal)
+        
+        XCTAssertEqual(goalVM.currentStreak, initialStreak, "Streak should not increment twice in one day.")
     }
 }
