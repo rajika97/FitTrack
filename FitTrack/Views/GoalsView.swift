@@ -25,6 +25,7 @@ struct GoalsView: View {
                     if let goal = Int(newGoal), goal > 0 {
                         goalVM.dailyStepGoal = goal
                         newGoal = ""
+                        hideKeyboard()
                     }
                 }
                 .padding()
@@ -36,10 +37,18 @@ struct GoalsView: View {
             }
             .padding()
             .onTapGesture {
-                hideKeyboard()   
+                hideKeyboard()
             }
             .navigationTitle("Set Goals")
         }
+    }
+    
+    // Hide keyboard function
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                      to: nil,
+                                      from: nil,
+                                      for: nil)
     }
 }
 
