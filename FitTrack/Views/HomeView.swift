@@ -66,6 +66,11 @@ struct HomeView: View {
                     }
                     goalVM.updateStreakIfNeeded(currentSteps: pedometerVM.steps)
                 }
+                achievementsVM.checkForAchievements(
+                     stepsToday: pedometerVM.steps,
+                     streak: goalVM.currentStreak,
+                     totalDistance: pedometerVM.distance
+                 )
                 
                 if !activitySaved {
                     activityVM.saveTodayActivity(steps: pedometerVM.steps, distance: pedometerVM.distance)
